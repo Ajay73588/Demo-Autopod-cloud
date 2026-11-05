@@ -1,30 +1,218 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AutoPod Cloud</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoPod Cloud | Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header>
-        <h2>☁ AutoPod Cloud</h2>
-        <p>Container Management Dashboard</p>
-    </header>
+<div class="dashboard">
 
-    <main>
-        <h2>My Cloud Pods</h2>
-
-        <div class="card">
-            <h3>Pod 01</h3>
-            <p>Status: <span id="status">Stopped</span></p>
-            <p>CPU Usage: 45%</p>
-            <p>Memory Usage: 60%</p>
-
-            <button onclick="startPod()">Start Pod</button>
-            <button onclick="stopPod()">Stop Pod</button>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <span class="logo-icon">☁</span>
+            <h2>AutoPod<span> Cloud</span></h2>
         </div>
-    </main>
 
-    <script src="script.js"></script>
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a href="#" class="active">▦ &nbsp; Overview</a>
+            <a href="#pods">◈ &nbsp; My Pods</a>
+            <a href="#resources">▤ &nbsp; Resources</a>
+            <a href="#activity">◷ &nbsp; Activity Logs</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="user">
+                <div class="avatar">A</div>
+                <div>
+                    <strong>Admin User</strong>
+                    <small>Cloud Administrator</small>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p>Monitor and manage your cloud infrastructure.</p>
+            </div>
+            <div class="top-actions">
+                <span class="online">● System Online</span>
+                <button class="primary-btn" onclick="createPod()">
+                    + Create New Pod
+                </button>
+            </div>
+        </header>
+
+        <!-- Statistics -->
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Total Pods</span>
+                    <span class="stat-icon blue">◈</span>
+                </div>
+                <h2 id="totalPods">04</h2>
+                <small>Available instances</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Running Pods</span>
+                    <span class="stat-icon green">↗</span>
+                </div>
+                <h2 id="runningPods">02</h2>
+                <small>Currently active</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>CPU Usage</span>
+                    <span class="stat-icon purple">▥</span>
+                </div>
+                <h2 id="cpuValue">42%</h2>
+                <div class="progress"><div style="width:42%"></div></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Memory Usage</span>
+                    <span class="stat-icon orange">▤</span>
+                </div>
+                <h2 id="memoryValue">64%</h2>
+                <div class="progress orange-progress">
+                    <div style="width:64%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pods section -->
+        <section class="panel" id="pods">
+            <div class="section-header">
+                <div>
+                    <h2>Pod Management</h2>
+                    <p>Manage your deployed cloud containers.</p>
+                </div>
+
+                <input type="text" id="searchInput"
+                    placeholder="Search pods..." oninput="searchPods()">
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>POD NAME</th>
+                            <th>IMAGE</th>
+                            <th>STATUS</th>
+                            <th>CPU</th>
+                            <th>MEMORY</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="podTable">
+                        <tr>
+                            <td><strong>web-server</strong><small>pod-001</small></td>
+                            <td>nginx:latest</td>
+                            <td><span class="status running">● Running</span></td>
+                            <td>35%</td>
+                            <td>512 MB</td>
+                            <td><button class="action-btn stop" onclick="togglePod(this)">Stop</button></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>database</strong><small>pod-002</small></td>
+                            <td>mysql:8.0</td>
+                            <td><span class="status running">● Running</span></td>
+                            <td>48%</td>
+                            <td>1 GB</td>
+                            <td><button class="action-btn stop" onclick="togglePod(this)">Stop</button></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>backend-api</strong><small>pod-003</small></td>
+                            <td>node:latest</td>
+                            <td><span class="status stopped">● Stopped</span></td>
+                            <td>0%</td>
+                            <td>0 MB</td>
+                            <td><button class="action-btn start" onclick="togglePod(this)">Start</button></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>redis-cache</strong><small>pod-004</small></td>
+                            <td>redis:latest</td>
+                            <td><span class="status stopped">● Stopped</span></td>
+                            <td>0%</td>
+                            <td>0 MB</td>
+                            <td><button class="action-btn start" onclick="togglePod(this)">Start</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Bottom section -->
+        <section class="bottom-grid" id="resources">
+
+            <div class="panel resource-panel">
+                <h2>Resource Monitoring</h2>
+                <p>Current infrastructure utilization</p>
+
+                <div class="resource">
+                    <div><span>CPU Utilization</span><strong>42%</strong></div>
+                    <div class="progress"><div style="width:42%"></div></div>
+                </div>
+
+                <div class="resource">
+                    <div><span>Memory Utilization</span><strong>64%</strong></div>
+                    <div class="progress orange-progress"><div style="width:64%"></div></div>
+                </div>
+
+                <div class="resource">
+                    <div><span>Storage Utilization</span><strong>28%</strong></div>
+                    <div class="progress purple-progress"><div style="width:28%"></div></div>
+                </div>
+            </div>
+
+            <div class="panel activity-panel" id="activity">
+                <h2>Recent Activity</h2>
+                <p>Latest infrastructure events</p>
+
+                <div class="activity">
+                    <span class="activity-dot green-dot"></span>
+                    <div><strong>web-server started</strong><small>Container is now running</small></div>
+                </div>
+
+                <div class="activity">
+                    <span class="activity-dot blue-dot"></span>
+                    <div><strong>Resource monitoring</strong><small>CPU metrics updated</small></div>
+                </div>
+
+                <div class="activity">
+                    <span class="activity-dot orange-dot"></span>
+                    <div><strong>backend-api stopped</strong><small>Container stopped manually</small></div>
+                </div>
+            </div>
+
+        </section>
+
+        <footer>© 2026 AutoPod Cloud. All rights reserved.</footer>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
