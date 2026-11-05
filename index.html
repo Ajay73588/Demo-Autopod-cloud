@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AutoPod Cloud</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h2>☁ AutoPod Cloud</h2>
+        <p>Container Management Dashboard</p>
+    </header>
+
+    <main>
+        <h2>My Cloud Pods</h2>
+
+        <div class="card">
+            <h3>Pod 01</h3>
+            <p>Status: <span id="status">Stopped</span></p>
+            <p>CPU Usage: 45%</p>
+            <p>Memory Usage: 60%</p>
+
+            <button onclick="startPod()">Start Pod</button>
+            <button onclick="stopPod()">Stop Pod</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
